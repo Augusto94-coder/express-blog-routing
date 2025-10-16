@@ -1,14 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const posts = require("../data/articoli");
+const articoli = require("../data/articoli");
 
 
 router.get('/', function (req, res) {
-    res.send('Lista del post');
+    res.json(articoli);
 });
 // show
 router.get('/:id', function (req, res) {
-    res.send('Dettagli del post ' + req.params.id);
+    const id = Number(req.params.id);
+    const articolo = articoli.find(a => a.id === id);
+    if (!articolo) {
+        return res.status(404).json({ error: "Articolo non trovato" });
+    }
+    res.json(articolo);
 });
 // store
 router.post('/', function (req, res) {
